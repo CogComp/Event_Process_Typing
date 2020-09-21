@@ -1,0 +1,133 @@
+Installation instructions for WordNet 1.6 Semantic Concordance package.
+
+1. Manifest
+
+When the WordNet Semantic Concordance package is unbundled you should
+have the following files and subdirectories in this directory:
+
+	INSTALL		this file
+	LICENSE		WordNet copyright and license agreement
+	README		README file for WordNet system
+	doc		Semantic Concordance package documentation:
+
+			cntlist.5 cxtfile.5 semcor.7 
+			senseidx.5 taglist.5		man page source (nroff)
+			
+			cntlist.5ps cxtfile.5ps semcor.7ps
+			senseidx.5ps taglist.5ps	man page in Postscript
+
+			cntlist.htm cxtfile.htm semcor.htm
+			senseidx.htm taglist.htm	man page in HTML
+
+			cntlist.txt cxtfile.txt semcor.txt
+			senseidx.txt taglist.txt	man page in ASCII
+	
+	brown1		103 semantically tagged Brown Corpus files
+				(all content words tagged)
+	brown2		83 semantically tagged Brown Corpus files
+				(all content words tagged)
+	brownv		166 semantically tagged Brown Corpus files
+				(only verbs tagged)
+
+Each semantic concordance directory (brown1, brown2, brownv) contains
+the following files and subdirectories:
+
+	cntlist		file listing number of times each tagged sense
+			occurs in the semantic concordance 
+	statistics	statistics on the semantic concordance
+	tagfiles	directory of semantically tagged files
+	taglist		file listing location of all tagged senses 
+			within the semantic concordance 
+
+2. Installing the Semantic Concordance Package
+
+The Semantic Concordance package is distributed via FTP and on the
+WordNet CD-ROM.  If using the CD-ROM, you can either access the
+concordance files directly from the CD-ROM (saving about 43MB of disk
+space), or install it on your hard drive.
+
+2.1 Installing the FTP Package
+
+The FTP package is distributed packaged for Unix, PC and Macintosh
+platforms:
+
+	semcor16.tar.gz		Unix
+	semcor16.exe		PC
+	semcor16.mac.sea	Macintosh
+
+The downloaded files should be placed in WNHOME, the directory in
+which you installed the WordNet database package.  See "Installation
+Procedure" below for the next step.
+
+2.2 Installing from CD-ROM
+
+The CD-ROM has two semantic concordance directories: one contains the
+compressed archives for installation on your hard drive; the other
+contains the files listed in the Manifest for use directly from the
+CD-ROM.  
+
+For all platforms, installation of the Semantic Concordance package to
+your hard drive involves copying the compressed archive to the WNHOME
+directory, then uncompressing it.
+
+	File to copy from CD-ROM
+	========================
+	PC	packages\pc\semcor16.exe
+	Unix	packages/unix/semcor16.tar.gz
+	Mac	Packages:semcor16.mac.sea
+
+See "Installation Procedure" below for the next step.
+
+2.3 Installation Procedure
+
+The PC and Macintosh packages are self-extracting archives: simply
+execute the archive to unbundle the package.  The Unix archive is a
+compressed tar file.  Use the following command:
+
+	gunzip -c semcor16.tar.gz | tar xvf -
+
+Installation of the package creates a "semcor" subdirectory in WNHOME
+containing the files listed in the Manifest.
+
+2.3 Cleaning Up
+
+After successful installation of the Semantic Concordance package to
+your hard drive, you can remove the archive file from WNHOME.
+
+3. Using the Semantic Concordances
+
+You must have the WordNet 1.6 Database package to use the 1.6 semantic
+concordances.  Files in the semantic concordances are tagged to senses
+in the 1.6 database.  The Escort tool for browsing the semantic
+concordances for instances of tags to particular WordNet senses will
+be available separately from the WordNet Web and FTP sites at a later
+date. 
+
+The semantically tagged files are organized into three semantic
+concordances based on when the files were tagged.  In the case of
+"brownv", only verbs are tagged.  Prior releases have only included
+the 103 Brown Corpus files contained in the "brown1" semantic
+concordance.  The manual page "cxtfile.5" describes the format the
+semantically tagged files, and "semcor.7" is a discussion about the
+semantic concordances in general.
+
+3.1 Using the Semantic Concordances from the CD-ROM
+
+The Semantic Concordances can be used directly from the CD-ROM.  The
+files and directories listed in the Manifest can be found on the
+CD-ROM in the following directories:
+
+	PC and Unix	semcor
+	Macintosh	Semcor
+
+4. Information about WordNet
+
+Additional documentation and information about WordNet is available
+online.  From the WordNet Web site you can browse all of the WordNet
+Reference Manual manual pages, including those listed above, and can
+download "Five Papers on WordNet" which describes the WordNet project.
+The WordNet Reference Manual is also available for download as a
+compressed tar file or zip file from either our Web site or FTP site.
+
+Web site - http://www.cogsci.princeton.edu/~wn/
+FTP site - ftp.cogsci.princeton.edu, directory "pub/wordnet"
