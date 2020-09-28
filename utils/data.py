@@ -334,7 +334,7 @@ class Data(object):
         print("=== Arg trimmed to #", len([x for x,y in self.arg_vocab.items()]))
     
     
-    def align_verb_senses_mix(self, filepath='/shared/muhao/wordnet/sense_verb.tsv', mode='mix', limit=2):
+    def align_verb_senses_mix(self, filepath='../data/wordnet/sense_verb.tsv', mode='mix', limit=2):
         assert (mode in ['mix', 'first', 'list', 'limit'])
         w2s = {}
         for line in open(filepath):
@@ -383,7 +383,7 @@ class Data(object):
     
     
     
-    def align_arg_senses_mix(self, filepath='/shared/muhao/wordnet/sense_wn.tsv', mode='mix', limit=2):
+    def align_arg_senses_mix(self, filepath='../data/wordnet/sense_wn.tsv', mode='mix', limit=2):
         assert (mode in ['mix', 'first', 'list', 'limit'])
         w2s = {}
         for line in open(filepath):
