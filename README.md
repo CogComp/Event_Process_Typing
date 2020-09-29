@@ -48,7 +48,7 @@ Bibtex:
     @inproceedings{chen-etal-2020-what,
       title = {``What Are You Trying To Do?'' Semantic Typing of Event Processes},
       author = "Chen, Muhao and Zhang, Hongming and Wang, Haoyu and Roth, Dan",
-      booktitle = "Proceedings of the 24th Conference on Computational Natural Language Learning (CoNLL 2020)",
+      booktitle = "Proceedings of the 24th Conference on Computational Natural Language Learning (CoNLL)",
       year = "2020",
       publisher = "Association for Computational Linguistics"
     }
