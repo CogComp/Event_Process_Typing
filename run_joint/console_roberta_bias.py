@@ -56,7 +56,7 @@ def get_hypernym_path(input_word, max_length=20, return_single_set = True):
 
 
 def main():
-    data_bin, model_bin = '../run/seqVerbMC/data_subsrl_1sv_1sa_argtrim.bin', './full_model/Roberta_BI/full_model_sptoken_ep121_a1.0_m1-0.1_m2-0.1.bin'
+    data_bin, model_bin = '../data/data_subsrl_1sv_1sa_argtrim.bin', './full_model/Roberta_BI/full_model_sptoken_ep121_a1.0_m1-0.1_m2-0.1.bin'
     data = Data()
     if os.path.exists(data_bin):
         data.load(data_bin)
