@@ -12,7 +12,7 @@ Environment:
 ## Dataset  
 ./data contains the wikiHow Event Process Typing dataset contributed in this work. The same folder also contains verb and noun glosses from WordNet, and the SemCor dataset used for WSD.  
 The raw file of wikiHow Event Process Typing dataset is given as data_seq.tsv, where each row records the content and types labels of a process. Specifically, each tab separated row contains a sequence of subevent contents, and the last two cell are the action and object labels.  
-The binary file is a saved instance of the data.py object in utils, which has already read the process data and label glosses, and provided necessary indexing information to split, train and test.  
+The binary file is a saved instance of the data.py object in utils, which has already read the process data and label glosses, and provided necessary indexing information to split (random state=777 should always give the same split), train and test.  
 ./process archives several programs for dataset proprocessing.  
 
 ## Run the experiment  
