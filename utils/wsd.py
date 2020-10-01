@@ -5,7 +5,7 @@ from __future__ import division
 from __future__ import print_function
 import torch
 print(torch.cuda.is_available())
-from transformers import BertTokenizer, BertModel, GPT2Model, BertForMultipleChoice
+from transformers import BertTokenizer, BertModel, GPT2Model, BertForMultipleChoice, RobertaTokenizer, RobertaModel
 import tqdm, sklearn
 import numpy as np
 import os, time, sys
@@ -35,13 +35,19 @@ class WSD_BERT_NN(object):
         self.word2synembset = {}
         self.word2pos_syn = {}
         self.word2mfs = None
+        self.word2synsentset = {}
+        self.sem_cor_sent = []
         self.token_merge_mode = None
         self.pos_map = {'NN':'NOUN', 'JJ':'ADJ', 'VB':'VERB', 'RB':'ADV'}
         
     
     def initialize(self, pretrained='bert-base-uncased', tokenizer='bert-base-uncased', sep_token='[SEP]', annotation_key='lexsn', wn_firstsen_file='../data/ALL.mfs.txt'):
-        self.tokenizer = BertTokenizer.from_pretrained(tokenizer, sep_token=sep_token)
-        self.model = BertModel.from_pretrained(pretrained, output_hidden_states=True)
+        if pretrained.split('-')[0]=='bert':
+            self.tokenizer = BertTokenizer.from_pretrained(tokenizer, sep_token=sep_token)
+            self.model = BertModel.from_pretrained(pretrained, output_hidden_states=True)
+        elif pretrained.split('-')[0] == 'roberta':
+            self.tokenizer = RobertaTokenizer.from_pretrained(tokenizer, sep_token=sep_token)
+            self.model = RobertaModel.from_pretrained(pretrained, output_hidden_states=True)
         self.model.cuda()
         assert (annotation_key in ['lexsn', 'wnsn'])
         self.annotation_key = annotation_key
@@ -55,10 +61,13 @@ class WSD_BERT_NN(object):
                     if self.word2mfs.get(line[0]) is None:
                         self.word2mfs[line[0]] = line[1]
     
-    def load_and_encode_semcor(self, folder_path='../data/semcor-corpus/semcor/semcor/brownv/tagfiles', token_merge_mode='avg', avg_vec=True):
+    def load_and_encode_semcor(self, folder_path='../data/semcor-corpus/semcor/semcor/brownv/tagfiles', token_merge_mode='avg', avg_vec=True, clear=True):
         assert (token_merge_mode in ['avg', 'first'])
         self.token_merge_mode = token_merge_mode
         onlyfiles = [join(folder_path, f) for f in listdir(folder_path) if isfile(join('../data/semcor-corpus/semcor/semcor/brownv/tagfiles', f))]
+        if clear:
+            self.word2synembset, self.word2synsentset, word2pos_syn, self.sem_cor_sent = {}, {}, {}, []
+        sent_id = len(self.sem_cor_sent)
         for f in tqdm.tqdm(onlyfiles):
             tree = ET.parse(f)
             root = tree.getroot()
@@ -83,7 +92,9 @@ class WSD_BERT_NN(object):
                         poses.append(this_pos)
                     if len(sent) < 2:
                         continue
-                    tokenized_sent = self.tokenizer.encode(' '.join(sent), add_special_tokens=False)
+                    raw_sent = ' '.join(sent)
+                    self.sem_cor_sent.append(raw_sent)
+                    tokenized_sent = self.tokenizer.encode(raw_sent, add_special_tokens=False)
                     vecs = self.model(torch.tensor(tokenized_sent).cuda().unsqueeze(0))[0][0].data.cpu().numpy()
                     #print (vecs.shape)
                     begin = 0
@@ -109,6 +120,9 @@ class WSD_BERT_NN(object):
                             t_token = sent[i]
                             tokenized_token = self.tokenizer.encode(t_token, add_special_tokens=False)
                             tid = getsubidx(tokenized_sent, tokenized_token, begin)
+                            # if tid==None:
+                            #     print(t_token+' is None tid')
+                            #     continue
                             assert (tid is not None)
                             begin = tid + len(tokenized_token)
                             if token_merge_mode == 'avg':
@@ -122,6 +136,9 @@ class WSD_BERT_NN(object):
                                 self.word2synembset[t_token] = {}
                             if self.word2pos_syn.get(t_token) is None:
                                 self.word2pos_syn[t_token] = {}
+                            # Add sent to self.word2synsentset
+                            if self.word2synsentset.get(t_token) is None:
+                                self.word2synsentset[t_token] = {}
                             for this_sense in t_sense:
                                 if self.word2synembset[t_token].get(this_sense) is None:
                                     self.word2synembset[t_token][this_sense] = [t_vec]
@@ -131,6 +148,13 @@ class WSD_BERT_NN(object):
                                     self.word2pos_syn[t_token][this_pos] = set([this_sense])
                                 else:
                                     self.word2pos_syn[t_token][this_pos].add(this_sense)
+                                
+                                if self.word2synsentset[t_token].get(this_sense) is None:
+                                    self.word2synsentset[t_token][this_sense] = [sent_id]
+                                else:
+                                    self.word2synsentset[t_token][this_sense].append(sent_id)
+                    sent_id += 1
+                            
         
         if avg_vec:
             for X, senses in self.word2synembset.items():
@@ -183,9 +207,9 @@ class WSD_BERT_NN(object):
         return sense_id
     
     
-    def get_wn_sense_id_wpos(self, token, context, n_occur = 1, pos='VERB', token_merge_mode=None):
+    def get_wn_sense_id_wpos(self, token, context, n_occur = 1, pos='VB', token_merge_mode=None):
         assert (context.count(token) >= n_occur)
-        assert (pos in ['VERB', 'NOUN', 'ADJ', 'ADV'])
+        assert (pos in ['VB', 'NN', 'JJ', 'NNP', 'RB'])
         if token_merge_mode is None:
             token_merge_mode = self.token_merge_mode
         assert (token_merge_mode in ['first','avg'])
@@ -219,9 +243,10 @@ class WSD_BERT_NN(object):
         if pos_sense_set is not None:
             pos_sense_set = pos_sense_set.get(pos)
         if pos_sense_set is None:
-            return None
+            # no annotation for the same POS, then use all senses
+            pass
         for sid, Y in self.word2synembset[token].items():
-            if sid in pos_sense_set:
+            if pos_sense_set is None or sid in pos_sense_set:
                 for v in Y:
                     #print (v)
                     #print (t_vec)
@@ -236,6 +261,16 @@ class WSD_BERT_NN(object):
     
     def get_wn_first_sen(self, token):
         return self.word2mfs.get(token)
+    
+    def get_semcor_sense_contexts(self, word, sense_id):
+        rst = []
+        sentset = self.word2synsentset.get(word)
+        if sentset is not None:
+            sentset = sentset.get(sense_id)
+            if sentset is not None:
+                for i in sentset:
+                    rst.append(self.sem_cor_sent[i])
+        return rst
         
 
     def save(self, filename):
@@ -251,7 +286,7 @@ class WSD_BERT_NN(object):
 
 
 def main():
-    wsd_file = '../utils/wsd_bert_nn.bin'
+    wsd_file = 'wsd_bert_nn.bin'
     wsd = WSD_BERT_NN()
     if os.path.exists(wsd_file):
         wsd.load(wsd_file)
@@ -265,6 +300,12 @@ def main():
     print ("the rain *bank* the soil up behind the gate  ", wsd.get_wn_sense_id('bank',"the rain bank the soil up behind the gate", 1))
     print ("I pay the money straight into my *bank*  ", wsd.get_wn_sense_id('bank', "I pay the money straight into my bank", 1))
     print ("and I run, I *run* so far away  ", wsd.get_wn_sense_id('run', "and I run, I run so far away", 2))
+    print ("the second *run* of the practice still failed  ", wsd.get_wn_sense_id('run', "the second run of the practice still failed", 1))
+    
+    print ("the rain *bank* the soil up behind the gate  ", wsd.get_wn_sense_id_wpos('bank',"the rain bank the soil up behind the gate", 1, 'VB'))
+    print ("I pay the money straight into my *bank*  ", wsd.get_wn_sense_id_wpos('bank', "I pay the money straight into my bank", 1, 'NN'))
+    print ("and I run, I *run* so far away  ", wsd.get_wn_sense_id_wpos('run', "and I run, I run so far away", 2, 'VB'))
+    print ("the second *run* of the practice still failed  ", wsd.get_wn_sense_id_wpos('run', "the second run of the practice still failed", 1, 'NN'))
     
     
 if __name__ == "__main__":
