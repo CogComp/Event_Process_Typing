@@ -9,7 +9,7 @@ This paper studies a new cognitively moti-vated task, *multi-axis event process 
 ## Environment:
 
     python 3.6
-    Transformers (Hugging) version 2.11.0 (Important)
+    Transformers (Huggingface) version 2.11.0 (Important)
     PyTorch
     nltk
     AllenNLP
