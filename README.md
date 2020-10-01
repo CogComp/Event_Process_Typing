@@ -47,11 +47,10 @@ Users can also train the model on the full wikiHow event process dataset by runn
 **TODO:** We are working on creating a Web system demonstration, and would update at here soon.
 
 ## Reference
-This work is to be published at the 24th SIGNLL Conference on Computational Natural Language Learning (CoNLL), 2020.  
 Bibtex:
   
     @inproceedings{chen-etal-2020-what,
-      title = {``What Are You Trying To Do?'' Semantic Typing of Event Processes},
+      title = {``{W}hat {A}re {Y}ou {T}rying {T}o {D|o?'' {S}emantic {T}yping of {E}vent {P}rocesses},
       author = "Chen, Muhao and Zhang, Hongming and Wang, Haoyu and Roth, Dan",
       booktitle = "Proceedings of the 24th Conference on Computational Natural Language Learning (CoNLL)",
       year = "2020",
