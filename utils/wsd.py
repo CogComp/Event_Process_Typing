@@ -180,7 +180,7 @@ class WSD_BERT_NN(object):
                 if n_dist < m_dist:
                     m_dist = n_dist
                     sense_id = sid
-        return sid
+        return sense_id
     
     
     def get_wn_sense_id_wpos(self, token, context, n_occur = 1, pos='VERB', token_merge_mode=None):
