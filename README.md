@@ -10,7 +10,7 @@ This paper studies a new (cognitively motivated) semantic typing task, *multi-ax
 
     python 3.6
     Transformers (Huggingface) version 2.11.0 (Important)
-    PyTorch
+    PyTorch with CUDA support
     nltk 3.4.5
     AllenNLP 1.0
   
