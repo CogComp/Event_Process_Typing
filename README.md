@@ -11,8 +11,8 @@ This paper studies a new (cognitively motivated) semantic typing task, *multi-ax
     python 3.6
     Transformers (Huggingface) version 2.11.0 (Important)
     PyTorch
-    nltk
-    AllenNLP
+    nltk 3.4.5
+    AllenNLP 1.0
   
 ## Dataset  
 ./data contains the wikiHow Event Process Typing dataset contributed in this work. The same folder also contains verb and noun glosses from WordNet, and the SemCor dataset used for WSD.  
