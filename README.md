@@ -44,7 +44,9 @@ would receive type information such as
 **Link to the pre-trained full models** for console demo: https://drive.google.com/drive/folders/1b8peVVRNANL7r_Wnyyt4pPsyNROIlOfT?usp=sharing  
 Users can also train the model on the full wikiHow event process dataset by running ./runjoint/train_full_roberta_bias.py  
 
-**TODO:** We are working on creating a Web system demonstration, and would update at here soon.
+## Web demo
+
+A Web demo should be running at http://dickens.seas.upenn.edu:4035/
 
 ## Reference
 Bibtex:
