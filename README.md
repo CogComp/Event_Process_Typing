@@ -46,7 +46,8 @@ Users can also train the model on the full wikiHow event process dataset by runn
 
 ## Web demo
 
-A Web demo should be running at https://cogcomp.seas.upenn.edu/page/demo_view/STEP
+A Web demo should be running at https://cogcomp.seas.upenn.edu/page/demo_view/STEP  
+![Demo screenshot](https://github.com/CogComp/Event_Process_Typing/blob/master/readme/demo.png)
 
 ## Reference
 Bibtex:
