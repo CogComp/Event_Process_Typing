@@ -6,7 +6,7 @@ This paper studies a new (cognitively motivated) semantic typing task, *multi-ax
 
 ![Fig1 in paper](https://github.com/CogComp/Event_Process_Typing/blob/master/readme/processes.png)
 
-## Environment:
+## Environment
 
     python 3.6
     Transformers (Huggingface) version 2.11.0 (Important)
