@@ -53,7 +53,7 @@ A Web demo should be running at https://cogcomp.seas.upenn.edu/page/demo_view/ST
 Bibtex:
   
     @inproceedings{chen-etal-2020-what,
-      title = {``{W}hat {A}re {Y}ou {T}rying {T}o {D|o?'' {S}emantic {T}yping of {E}vent {P}rocesses},
+      title = {``{W}hat {A}re {Y}ou {T}rying {T}o {D}o?'' {S}emantic {T}yping of {E}vent {P}rocesses},
       author = "Chen, Muhao and Zhang, Hongming and Wang, Haoyu and Roth, Dan",
       booktitle = "Proceedings of the 24th Conference on Computational Natural Language Learning (CoNLL)",
       year = "2020",
